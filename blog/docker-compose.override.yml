@@ -1,0 +1,12 @@
+version: '3'
+
+
+services:
+
+  blog_service:
+    ports:
+      - "8080:8000"
+
+  blog_pg:
+    ports:
+      - "25432:5432"

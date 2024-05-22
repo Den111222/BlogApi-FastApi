@@ -1,0 +1,10 @@
+Generic single-database configuration with an async dbapi.
+
+Инициализация
+alembic init --t async migrations
+
+Генерация миграций
+alembic revision --autogenerate -m <migration_name>
+
+Применение миграций
+alembic upgrade head

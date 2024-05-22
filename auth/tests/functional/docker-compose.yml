@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+  auth_service_test:
+    extends:
+      file: ../../common.yaml
+      service: auth_service
+    env_file:
+      - ../../.env.test
+    depends_on:
+      - auth_pg_test
+    ports:
+      - "8005:8000"
+    networks:
+      - backend
+
+  auth_pg_test:
+    extends:
+      file: ../../common.yaml
+      service: auth_pg
+    env_file:
+      - ../../.env.test
+    ports:
+      - '55432:5432'
+    networks:
+      - backend
+
+  auth_redis_test:
+      extends:
+        file: ../../common.yaml
+        service: auth_redis
+      networks:
+        - backend
+
+
+  auth_tests:
+    build:
+      context: .
+    image: auth_tests-image
+    env_file:
+      - ../../.env.test
+    depends_on:
+      - auth_pg_test
+      #      - auth_redis_test
+      - auth_service_test
+    expose:
+      - 8000
+    networks:
+      - backend
+
+
+networks:
+  backend:
+    driver: bridge

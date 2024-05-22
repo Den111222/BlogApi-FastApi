@@ -1,0 +1,30 @@
+version: '3'
+
+
+services:
+
+  blog_service:
+    build: .
+    env_file:
+      - .env
+    depends_on:
+      - blog_pg
+    networks:
+      - backend
+
+  blog_pg:
+    image: postgres:alpine
+    env_file:
+      - .env
+    networks:
+      - backend
+
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  data1:
+  auth_pg_data:
+    driver: local

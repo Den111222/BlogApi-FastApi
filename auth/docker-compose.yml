@@ -1,0 +1,33 @@
+version: '3'
+
+
+services:
+  auth_service:
+    build: .
+    env_file:
+      - .env
+    depends_on:
+      - auth_pg
+      - auth_redis
+    networks:
+      - backend
+
+  auth_pg:
+    image: postgres:alpine
+    env_file:
+      - .env
+    networks:
+      - backend
+
+  auth_redis:
+    image: redis:alpine
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  auth_pg_data:
+    driver: local
