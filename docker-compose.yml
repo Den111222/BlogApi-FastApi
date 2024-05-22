@@ -1,0 +1,41 @@
+version: '3'
+
+
+services:
+
+  # API Blog. 0
+  blog_service:
+    extends:
+      file: blog/docker-compose.yml
+      service: blog_service
+
+  blog_pg:
+    extends:
+      file: blog/docker-compose.yml
+      service: blog_pg
+
+  # Auth Service. 2
+  auth_service:
+    extends:
+      file: auth/docker-compose.yml
+      service: auth_service
+
+  auth_pg:
+    extends:
+      file: auth/docker-compose.yml
+      service: auth_pg
+
+  auth_redis:
+    extends:
+      file: auth/docker-compose.yml
+      service: auth_redis
+
+volumes:
+  auth_pg_data:
+    driver: local
+  blog_api:
+  data1:
+
+networks:
+  backend:
+    driver: bridge

@@ -1,0 +1,68 @@
+@startuml
+
+entity "posts" {
+  + id: uuid NN
+  + author_login: varchar(200) NN
+  + title: varchar(200) NN
+  + text: varchar
+  + created_ad: timestamp
+  + published: boolean
+  + deleted: boolean
+  + category_id: uuid NN
+  + published_ad: timestamp
+
+  -- indices --
+  #1: unique (id)
+  author_login_title_idx: unique (author_login, title, deleted)
+  ix_posts_author_login: index (author_login)
+  ix_posts_title: index (title)
+
+  -- keys --
+  #1: PK (id) (underlying index #1)
+
+  -- foreign-keys --
+  #1: foreign key (category_id) -> categories.id d:cascade
+}
+
+entity "categories" {
+  + id: uuid NN
+  + name: varchar(200) NN
+  + text: varchar
+  + deleted: boolean
+
+  -- indices --
+  #1: unique (id)
+  #2: unique (name)
+
+  -- keys --
+  #1: PK (id) (underlying index #1)
+  #2: AK (name) (underlying index #2)
+}
+
+entity "tags" {
+  + id: uuid NN
+  + name: varchar(20) NN
+
+  -- indices --
+  #1: unique (id)
+  #2: unique (name)
+
+  -- keys --
+  #1: PK (id) (underlying index #1)
+  #2: AK (name) (underlying index #2)
+}
+
+entity "post_tag_association" {
+  + post_id: uuid
+  + tag_id: uuid
+
+  -- foreign-keys --
+  #1: foreign key (post_id) -> posts.id d:cascade
+  #2: foreign key (tag_id) -> tags.id d:cascade
+}
+
+posts ||--o{ categories : "foreign key (category_id)"
+post_tag_association }o--|| posts : "foreign key (post_id)"
+post_tag_association }o--|| tags : "foreign key (tag_id)"
+
+@enduml
